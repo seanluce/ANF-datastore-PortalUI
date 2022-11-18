@@ -135,7 +135,7 @@
                             "name": "ANFserviceLevel",
                             "type": "Microsoft.Common.DropDown",
                             "visible": "[equals(steps('anfdatastore').DeployANFdatastore, true)]",
-                            "label": "Azure NetApp Files service level",
+                            "label": "ANF datastore service level",
                             "defaultValue": "Premium",
                             "multiLine": true,
                             "toolTip": "Select from standard, premium, or ultra",

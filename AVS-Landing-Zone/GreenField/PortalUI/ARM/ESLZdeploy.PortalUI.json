@@ -181,7 +181,7 @@
                                     "name": "ANFvnetinfo2",
                                     "type": "Microsoft.Common.TextBlock",
                                     "options": {
-                                        "text": "When using Azure NetApp Files datastores it is recommended to use a dedicated virtual network connected to your AVS private cloud via an ExpressRoute gateway. For optimal performance, this deployment will create an ExpressRoute Gateway using the UltraPerformance SKU with FastPath enabled. See the link below for more information.",
+                                        "text": "When using Azure NetApp Files datastores it is recommended to use a dedicated virtual network connected to your AVS private cloud via an ExpressRoute gateway. For optimal performance, this deployment will create an ExpressRoute gateway using the 'UltraPerformance' SKU with FastPath enabled. See the link below for more information.",
                                         "link": {
                                             "label": "Learn more.",
                                             "uri": "https://learn.microsoft.com/azure/azure-vmware/attach-azure-netapp-files-to-azure-vmware-solution-hosts?tabs=azure-portal#performance-best-practices"
@@ -194,7 +194,7 @@
                             "name": "ANFvNetAddressSpace",
                             "type": "Microsoft.Common.TextBox",
                             "visible": "[equals(steps('anfdatastore').DeployANFdatastore, true)]",
-                            "label": "ANF Virtual Network address range",
+                            "label": "ANF virtual network address range",
                             "toolTip": "Virtual network in Azure Native to host the ExpressRoute Gateway for connectivity to Azure NetApp Files datastore. Ensure this is not overlapping the AVS Private Cloud.",
                             "defaultValue": "",
                             "placeholder": "Example: 192.168.0.0/16",
@@ -208,7 +208,7 @@
                             "name": "ANFGatewaySubnetPrefix",
                             "type": "Microsoft.Common.TextBox",
                             "visible": "[equals(steps('anfdatastore').DeployANFdatastore, true)]",
-                            "label": "ANF Gateway Subnet Prefix",
+                            "label": "ANF GatewaySubnet prefix",
                             "toolTip": "Enter the address prefix for the new GatewaySubnet",
                             "defaultValue": "",
                             "placeholder": "Example: 192.168.0.0/27",

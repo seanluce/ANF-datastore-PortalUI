@@ -132,6 +132,35 @@
                             }
                         },
                         {
+                            "name": "ANFserviceLevel",
+                            "type": "Microsoft.Common.DropDown",
+                            "visible": true,
+                            "label": "Azure NetApp Files service level",
+                            "defaultValue": "Premium",
+                            "multiLine": true,
+                            "toolTip": "Select from standard, premium, or ultra",
+                            "constraints": {
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "Standard (16 MiB/s per TiB)",
+                                        "description": "",
+                                        "value": "Standard"
+                                    },
+                                    {
+                                        "label": "Premium (64 MiB/s per TiB",
+                                        "description": "",
+                                        "value": "Premium"
+                                    },
+                                    {
+                                        "label": "Ultra (128 MiB/s per TiB",
+                                        "description": "",
+                                        "value": "Ultra"
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             "name": "ANFvnet",
                             "type": "Microsoft.Common.Section",
                             "visible": "[equals(steps('anfdatastore').DeployANFdatastore, true)]",
@@ -213,6 +242,7 @@
                 "Location": "[steps('basics').avsDeploymentScope.location.name]",
                 "DeployANFdatastore": "[steps('anfdatastore').DeployANFdatastore]",
                 "ANFdatastoreSize": "[steps('anfdatastore').ANFdatastoreSize]",
+                "ANFServiceLevel": "[steps('anfdatastore').ANFserviceLevel]",
                 "ANFvNetAddressSpace": "[steps('anfdatastore').ANFvNetAddressSpace]",
                 "ANFGatewaySubnetPrefix": "[steps('anfdatastore').ANFGatewaySubnetPrefix]",
                 "ANFDelegatedSubnetPrefix": "[steps('anfdatastore').ANFDelegatedSubnetPrefix]"

@@ -41,6 +41,13 @@
       "maxValue": 100,
       "minValue": 4
     },
+    "ANFServiceLevel" : {
+      "type": "string",
+      "defaultValue": "Premium",
+      "metadata": {
+        "description": "Service level of Azure NetApp Files datastore; standard, premium, or ultra"
+      }
+    },
     "ANFvNetAddressSpace": {
       "type": "string",
       "defaultValue": "",

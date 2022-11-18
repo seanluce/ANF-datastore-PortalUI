@@ -222,7 +222,7 @@
                             "name": "ANFDelegatedSubnetPrefix",
                             "type": "Microsoft.Common.TextBox",
                             "visible": "[equals(steps('anfdatastore').DeployANFdatastore, true)]",
-                            "label": "ANF Delegated Subnet Prefix",
+                            "label": "ANF delegated subnet prefix",
                             "toolTip": "Enter the address prefix for the new Azure NetApp Files delegated subnet",
                             "defaultValue": "",
                             "placeholder": "Example: 192.168.1.0/24",

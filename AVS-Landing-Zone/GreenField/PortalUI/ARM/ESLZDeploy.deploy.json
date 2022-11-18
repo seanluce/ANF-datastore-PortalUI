@@ -1,0 +1,628 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.10.61.36676",
+      "templateHash": "7169719867357220277"
+    }
+  },
+  "parameters": {
+    "Prefix": {
+      "type": "string",
+      "defaultValue": "AVS",
+      "maxLength": 20,
+      "minLength": 1,
+      "metadata": {
+        "description": "The prefix to use on resources inside this template"
+      }
+    },
+    "Location": {
+      "type": "string",
+      "defaultValue": "[deployment().location]",
+      "metadata": {
+        "description": "Optional: The location the private cloud should be deployed to, by default this will be the location of the deployment"
+      }
+    },
+    "DeployANFdatastore": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Should Azure NetApp Files datastore be deployed as part of the deployment"
+      }
+    },
+    "ANFdatastoreSize": {
+      "type": "int",
+      "defaultValue": 16,
+      "metadata": {
+        "description": "Size in TiB of Azure NetApp Files datastore"
+      },
+      "maxValue": 100,
+      "minValue": 4
+    },
+    "ANFvNetAddressSpace": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The address space used for the VNet attached to AVS. Must be non-overlapping with existing networks"
+      }
+    },
+    "ANFGatewaySubnetPrefix": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The address space used for the VNet attached to AVS. Must be non-overlapping with existing networks"
+      }
+    },
+    "ANFDelegatedSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The address space used for the VNet attached to AVS. Must be non-overlapping with existing networks"
+      }
+    },
+    "netappAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the NetApp Account to be created for the Azure NetApp Files datastore"
+      }
+    },
+    "netappCapacityPoolName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the capacity pool to be created for the Azure NetApp Files datastore"
+      }
+    },
+    "netappCapacityPoolServiceLevel": {
+      "type": "string",
+      "defaultValue": "Ultra",
+      "allowedValues": [
+        "Standard",
+        "Premium",
+        "Ultra"
+      ],
+      "metadata": {
+        "description": "Service level of the Azure NetApp Files capacity pool and volume to be created"
+      }
+    },
+    "netappVolumeName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the volume to be created for the Azure NetApp Files datastore"
+      }
+    },
+    "netappVolumeSize": {
+      "type": "int",
+      "metadata": {
+        "description": "Size of the volume to be created for the Azure NetApp Files datastore"
+      }
+    },
+    "ANFGatewayName": {
+      "type": "string",
+      "defaultValue": "[parameters('VNetName')]",
+      "metadata": {
+        "description": "Name of the virtual network gateway to be created"
+      }
+    },
+    "ANFGatewaySku": {
+      "type": "string",
+      "defaultValue": "UltraPerformance",
+      "allowedValues": [
+        "Standard",
+        "HighPerformance",
+        "UltraPerformance",
+        "ErGw1AZ",
+        "ErGw2AZ",
+        "ErGw3AZ"
+      ],
+      "metadata": {
+        "description": "Virtual network gateway SKU to be created"
+      }
+    }
+  },
+  "variables": {
+    "deploymentPrefix": "[format('AVS-{0}', uniqueString(deployment().name, parameters('Location')))]",
+    "varCuaid": "1cf4a3e3-529c-4fb2-ba6a-63dff7d71586"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "[format('{0}-AVS', variables('deploymentPrefix'))]",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "Prefix": {
+            "value": "[parameters('Prefix')]"
+          },
+          "Location": {
+            "value": "[parameters('Location')]"
+          },
+          "PrivateCloudAddressSpace": {
+            "value": "[parameters('PrivateCloudAddressSpace')]"
+          },
+          "PrivateCloudHostCount": {
+            "value": "[parameters('PrivateCloudHostCount')]"
+          },
+          "PrivateCloudSKU": {
+            "value": "[parameters('PrivateCloudSKU')]"
+          },
+          "DeployPrivateCloud": {
+            "value": "[parameters('DeployPrivateCloud')]"
+          },
+          "ExistingPrivateCloudResourceId": {
+            "value": "[parameters('ExistingPrivateCloudResourceId')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.10.61.36676",
+              "templateHash": "16479859764732563453"
+            }
+          },
+          "parameters": {
+            "Location": {
+              "type": "string"
+            },
+            "Prefix": {
+              "type": "string"
+            },
+            "PrivateCloudAddressSpace": {
+              "type": "string"
+            },
+            "PrivateCloudSKU": {
+              "type": "string"
+            },
+            "PrivateCloudHostCount": {
+              "type": "int"
+            },
+            "DeployPrivateCloud": {
+              "type": "bool"
+            },
+            "ExistingPrivateCloudResourceId": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "condition": "[parameters('DeployPrivateCloud')]",
+              "type": "Microsoft.Resources/resourceGroups",
+              "apiVersion": "2021-04-01",
+              "name": "[format('{0}-PrivateCloud', parameters('Prefix'))]",
+              "location": "[parameters('Location')]"
+            },
+            {
+              "condition": "[parameters('DeployPrivateCloud')]",
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2020-10-01",
+              "name": "[format('{0}-PrivateCloud', deployment().name)]",
+              "resourceGroup": "[format('{0}-PrivateCloud', parameters('Prefix'))]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "Prefix": {
+                    "value": "[parameters('Prefix')]"
+                  },
+                  "Location": {
+                    "value": "[parameters('Location')]"
+                  },
+                  "NetworkBlock": {
+                    "value": "[parameters('PrivateCloudAddressSpace')]"
+                  },
+                  "SKUName": {
+                    "value": "[parameters('PrivateCloudSKU')]"
+                  },
+                  "ManagementClusterSize": {
+                    "value": "[parameters('PrivateCloudHostCount')]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.10.61.36676",
+                      "templateHash": "14187122155862849392"
+                    }
+                  },
+                  "parameters": {
+                    "Prefix": {
+                      "type": "string"
+                    },
+                    "NetworkBlock": {
+                      "type": "string"
+                    },
+                    "ManagementClusterSize": {
+                      "type": "int"
+                    },
+                    "SKUName": {
+                      "type": "string"
+                    },
+                    "Location": {
+                      "type": "string"
+                    }
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.AVS/privateClouds",
+                      "apiVersion": "2021-12-01",
+                      "name": "[format('{0}-SDDC', parameters('Prefix'))]",
+                      "sku": {
+                        "name": "[parameters('SKUName')]"
+                      },
+                      "location": "[parameters('Location')]",
+                      "properties": {
+                        "networkBlock": "[parameters('NetworkBlock')]",
+                        "internet": "Disabled",
+                        "managementCluster": {
+                          "clusterSize": "[parameters('ManagementClusterSize')]"
+                        }
+                      }
+                    }
+                  ],
+                  "outputs": {
+                    "PrivateCloudName": {
+                      "type": "string",
+                      "value": "[format('{0}-SDDC', parameters('Prefix'))]"
+                    },
+                    "PrivateCloudResourceId": {
+                      "type": "string",
+                      "value": "[resourceId('Microsoft.AVS/privateClouds', format('{0}-SDDC', parameters('Prefix')))]"
+                    }
+                  }
+                }
+              },
+              "dependsOn": [
+                "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-PrivateCloud', parameters('Prefix')))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "PrivateCloudName": {
+              "type": "string",
+              "value": "[if(parameters('DeployPrivateCloud'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-PrivateCloud', parameters('Prefix'))), 'Microsoft.Resources/deployments', format('{0}-PrivateCloud', deployment().name)), '2020-10-01').outputs.PrivateCloudName.value, '')]"
+            },
+            "PrivateCloudResourceGroupName": {
+              "type": "string",
+              "value": "[if(parameters('DeployPrivateCloud'), format('{0}-PrivateCloud', parameters('Prefix')), split(parameters('ExistingPrivateCloudResourceId'), '/')[4])]"
+            },
+            "PrivateCloudResourceId": {
+              "type": "string",
+              "value": "[if(parameters('DeployPrivateCloud'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-PrivateCloud', parameters('Prefix'))), 'Microsoft.Resources/deployments', format('{0}-PrivateCloud', deployment().name)), '2020-10-01').outputs.PrivateCloudResourceId.value, '')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "condition": "[parameters('DeployANFdatastore')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "[format('{0}-ANFdatastore', variables('deploymentPrefix'))]",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.10.61.36676",
+              "templateHash": "18167728487499677759"
+            }
+          },
+          "parameters": {
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/virtualNetworks",
+              "apiVersion": "2021-02-01",
+              "name": "[format('{0}-ANFVNet', parameters('Prefix'))]",
+              "location": "[parameters('Location')]",
+              "properties": {
+                "addressSpace": {
+                  "addressPrefixes": [
+                    "[parameters('ANFvNetAddressSpace')]"
+                  ]
+                },
+                "subnets": [
+                  {
+                    "name": "GatewaySubnet",
+                    "properties": {
+                      "addressPrefix": "[parameters('ANFGatewaySubnetPrefix')]"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Network/virtualNetworks/subnets",
+              "apiVersion": "2022-01-01",
+              "name": "[format('{0}/{1}', parameters('VNetName'), 'ANFDelegatedSubnet')]",
+              "properties": {
+                "delegations": [
+                  {
+                    "name": "microsoftnetapp",
+                    "properties": {
+                      "serviceName": "Microsoft.Netapp/volumes"
+                    }
+                  }
+                ],
+                "addressPrefix": "[parameters('ANFDelegatedSubnetPrefix')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]"
+              ],
+              "metadata": {
+                "description": "create Azure NetApp files delegated subnet"
+              }
+            },
+            {
+              "type": "Microsoft.Network/publicIPAddresses",
+              "apiVersion": "2021-02-01",
+              "name": "[format('{0}-PIP', parameters('GatewayName'))]",
+              "location": "[parameters('Location')]",
+              "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+              },
+              "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+              }
+            },
+            {
+              "type": "Microsoft.Network/virtualNetworkGateways",
+              "apiVersion": "2021-02-01",
+              "name": "[parameters('GatewayName')]",
+              "location": "[parameters('Location')]",
+              "properties": {
+                "gatewayType": "ExpressRoute",
+                "sku": {
+                  "name": "[parameters('GatewaySku')]",
+                  "tier": "[parameters('GatewaySku')]"
+                },
+                "ipConfigurations": [
+                  {
+                    "name": "default",
+                    "properties": {
+                      "privateIPAllocationMethod": "Dynamic",
+                      "subnet": {
+                        "id": "[format('{0}/subnets/GatewaySubnet', resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName')))]"
+                      },
+                      "publicIPAddress": {
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-PIP', parameters('GatewayName')))]"
+                      }
+                    }
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-PIP', parameters('GatewayName')))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Network/connections",
+              "apiVersion": "2021-02-01",
+              "name": "[parameters('PrivateCloudName')]",
+              "location": "[parameters('Location')]",
+              "properties": {
+                "connectionType": "ExpressRoute",
+                "routingWeight": 0,
+                "expressRouteGatewayBypass": true,
+                "virtualNetworkGateway1": {
+                  "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('GatewayName'))]",
+                  "properties": {}
+                },
+                "peer": {
+                  "id": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', parameters('PrivateCloudSubscriptionId'), parameters('PrivateCloudResourceGroup')), 'Microsoft.Resources/deployments', 'AVSAuthorization')).outputs.ExpressRouteId.value]"
+                },
+                "authorizationKey": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', parameters('PrivateCloudSubscriptionId'), parameters('PrivateCloudResourceGroup')), 'Microsoft.Resources/deployments', 'AVSAuthorization')).outputs.ExpressRouteAuthorizationKey.value]"
+              },
+              "dependsOn": [
+                "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', parameters('PrivateCloudSubscriptionId'), parameters('PrivateCloudResourceGroup')), 'Microsoft.Resources/deployments', 'AVSAuthorization')]",
+                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('GatewayName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.NetApp/netAppAccounts",
+              "apiVersion": "2022-01-01",
+              "name": "[parameters('netappAccountName')]",
+              "location": "[parameters('Location')]",
+              "metadata": {
+                "description": "create Azure NetApp Files account"
+              }
+            },
+            {
+              "type": "Microsoft.NetApp/netAppAccounts/capacityPools",
+              "apiVersion": "2022-01-01",
+              "name": "[format('{0}/{1}', parameters('netappAccountName'), parameters('netappCapacityPoolName'))]",
+              "location": "[parameters('Location')]",
+              "properties": {
+                "coolAccess": false,
+                "qosType": "Auto",
+                "serviceLevel": "[parameters('netappCapacityPoolServiceLevel')]",
+                "size": "[parameters('netappCapacityPoolSize')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.NetApp/netAppAccounts', parameters('netappAccountName'))]"
+              ],
+              "metadata": {
+                "description": "create Azure NetApp Files capacity pool"
+              }
+            },
+            {
+              "type": "Microsoft.NetApp/netAppAccounts/capacityPools/volumes",
+              "apiVersion": "2022-01-01",
+              "name": "[format('{0}/{1}/{2}', parameters('netappAccountName'), parameters('netappCapacityPoolName'), parameters('netappVolumeName'))]",
+              "location": "[parameters('Location')]",
+              "properties": {
+                "avsDataStore": "Enabled",
+                "creationToken": "[parameters('netappVolumeName')]",
+                "exportPolicy": {
+                  "rules": [
+                    {
+                      "allowedClients": "0.0.0.0/0",
+                      "chownMode": "restricted",
+                      "cifs": false,
+                      "hasRootAccess": true,
+                      "nfsv3": true,
+                      "nfsv41": false,
+                      "ruleIndex": 1,
+                      "unixReadWrite": true
+                    }
+                  ]
+                },
+                "networkFeatures": "Standard",
+                "protocolTypes": [
+                  "NFSv3"
+                ],
+                "serviceLevel": "[parameters('netappCapacityPoolServiceLevel')]",
+                "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VNetName'), 'ANFDelegatedSubnet')]",
+                "usageThreshold": "[parameters('netappVolumeSize')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.NetApp/netAppAccounts/capacityPools', parameters('netappAccountName'), parameters('netappCapacityPoolName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VNetName'), 'ANFDelegatedSubnet')]"
+              ],
+              "metadata": {
+                "description": "create Azure NetApp Files volume"
+              }
+            },
+            {
+              "type": "Microsoft.AVS/privateClouds/clusters/datastores",
+              "apiVersion": "2021-12-01",
+              "name": "[format('{0}/{1}/{2}', parameters('PrivateCloudName'), parameters('PrivateCloudClusterName'), parameters('netappVolumeName'))]",
+              "properties": {
+                "netAppVolume": {
+                  "id": "[resourceId('Microsoft.NetApp/netAppAccounts/capacityPools/volumes', parameters('netappAccountName'), parameters('netappCapacityPoolName'), parameters('netappVolumeName'))]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/connections', parameters('PrivateCloudName'))]",
+                "[resourceId('Microsoft.NetApp/netAppAccounts/capacityPools/volumes', parameters('netappAccountName'), parameters('netappCapacityPoolName'), parameters('netappVolumeName'))]"
+              ],
+              "metadata": {
+                "description": "create AVS datastore from ANF volume"
+              }
+            },
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2020-10-01",
+              "name": "AVSAuthorization",
+              "subscriptionId": "[parameters('PrivateCloudSubscriptionId')]",
+              "resourceGroup": "[parameters('PrivateCloudResourceGroup')]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "AuthKeyName": {
+                    "value": "[parameters('GatewayName')]"
+                  },
+                  "PrivateCloudName": {
+                    "value": "[parameters('PrivateCloudName')]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.11.1.770",
+                      "templateHash": "18048577385911703722"
+                    }
+                  },
+                  "parameters": {
+                    "PrivateCloudName": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "The existing Private Cloud name"
+                      }
+                    },
+                    "AuthKeyName": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "The authorization key name to be created"
+                      }
+                    }
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.AVS/privateClouds/authorizations",
+                      "apiVersion": "2021-06-01",
+                      "name": "[format('{0}/{1}', parameters('PrivateCloudName'), parameters('AuthKeyName'))]"
+                    }
+                  ],
+                  "outputs": {
+                    "ExpressRouteAuthorizationKey": {
+                      "type": "string",
+                      "value": "[reference(resourceId('Microsoft.AVS/privateClouds/authorizations', parameters('PrivateCloudName'), parameters('AuthKeyName'))).expressRouteAuthorizationKey]"
+                    },
+                    "ExpressRouteId": {
+                      "type": "string",
+                      "value": "[reference(resourceId('Microsoft.AVS/privateClouds', parameters('PrivateCloudName')), '2021-06-01').circuit.expressRouteID]"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2020-10-01",
+              "name": "[format('pid-{0}-{1}', variables('varCuaid'), uniqueString(resourceGroup().location))]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {},
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.11.1.770",
+                      "templateHash": "1882150209236915071"
+                    }
+                  },
+                  "resources": []
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "ExRConnectionResourceId": {
+              "type": "string",
+              "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('NetworkResourceGroup')), 'Microsoft.Resources/deployments', format('{0}-ExR', deployment().name))).outputs.ExRConnectionResourceId.value]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+      ]
+    }
+  ]
+}

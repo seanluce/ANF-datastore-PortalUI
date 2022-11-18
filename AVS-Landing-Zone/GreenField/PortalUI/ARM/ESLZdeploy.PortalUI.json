@@ -134,7 +134,7 @@
                         {
                             "name": "ANFserviceLevel",
                             "type": "Microsoft.Common.DropDown",
-                            "visible": true,
+                            "visible": "[equals(steps('anfdatastore').DeployANFdatastore, true)]",
                             "label": "Azure NetApp Files service level",
                             "defaultValue": "Premium",
                             "multiLine": true,
@@ -148,12 +148,12 @@
                                         "value": "Standard"
                                     },
                                     {
-                                        "label": "Premium (64 MiB/s per TiB",
+                                        "label": "Premium (64 MiB/s per TiB)",
                                         "description": "",
                                         "value": "Premium"
                                     },
                                     {
-                                        "label": "Ultra (128 MiB/s per TiB",
+                                        "label": "Ultra (128 MiB/s per TiB)",
                                         "description": "",
                                         "value": "Ultra"
                                     }

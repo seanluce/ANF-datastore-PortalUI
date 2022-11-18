@@ -214,7 +214,7 @@
                 "DeployANFdatastore": "[steps('anfdatastore').DeployANFdatastore]",
                 "ANFdatastoreSize": "[steps('anfdatastore').ANFdatastoreSize]",
                 "ANFvNetAddressSpace": "[steps('anfdatastore').ANFvNetAddressSpace]",
-                "ANFGatewaySubnetPrefix": "[steps('anfdatastore').ANFGatewaySubnet]",
+                "ANFGatewaySubnetPrefix": "[steps('anfdatastore').ANFGatewaySubnetPrefix]",
                 "ANFDelegatedSubnetPrefix": "[steps('anfdatastore').ANFDelegatedSubnetPrefix]"
             },
             "kind": "Subscription",

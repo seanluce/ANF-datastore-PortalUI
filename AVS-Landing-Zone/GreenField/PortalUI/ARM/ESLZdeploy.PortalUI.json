@@ -211,6 +211,7 @@
             "parameters": {
                 "Prefix": "[steps('basics').avsDeploymentPrefix]",
                 "Location": "[steps('basics').avsDeploymentScope.location.name]",
+                "DeployANFdatastore": "[steps('anfdatastore').DeployANFdatastore]",
                 "ANFdatastoreSize": "[steps('anfdatastore').ANFdatastoreSize]",
                 "ANFvNetAddressSpace": "[steps('anfdatastore').ANFvNetAddressSpace]",
                 "ANFGatewaySubnetPrefix": "[steps('anfdatastore').ANFGatewaySubnet]",

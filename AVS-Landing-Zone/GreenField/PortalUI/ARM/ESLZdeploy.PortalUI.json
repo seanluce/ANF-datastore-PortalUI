@@ -195,7 +195,7 @@
                             "type": "Microsoft.Common.TextBox",
                             "visible": "[equals(steps('anfdatastore').DeployANFdatastore, true)]",
                             "label": "ANF virtual network address range",
-                            "toolTip": "Virtual network in Azure Native to host the ExpressRoute Gateway for connectivity to Azure NetApp Files datastore. Ensure this is not overlapping the AVS Private Cloud.",
+                            "toolTip": "Virtual network to host the ExpressRoute gateway for connectivity to Azure NetApp Files datastores. Ensure this is not overlapping the AVS private cloud.",
                             "defaultValue": "",
                             "placeholder": "Example: 192.168.0.0/16",
                             "constraints": {

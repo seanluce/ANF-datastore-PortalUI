@@ -133,7 +133,7 @@
             "value": "[parameters('ANFServiceLevel')]"
           },
           "ANFCapacityPoolSize": {
-            "value": "parameters('ANFdatastoreSize')]"
+            "value": "[int(parameters('ANFdatastoreSize'))]"
           },
           "ANFVolumeName": {
             "value": "[parameters('ANFVolumeName')]"

@@ -136,13 +136,13 @@
             "value": 1099511627776
           },
           "ANFCapacityPoolSize": {
-            "value": "[mul(parameters('ANFdatastoreSize'), parameters('TiBtoBytes'))]"
+            "value": 4398046511104
           },
           "ANFVolumeName": {
             "value": "[parameters('ANFVolumeName')]"
           },
           "ANFVolumeSize": {
-            "value": "[mul(parameters('ANFdatastoreSize'), parameters('TiBtoBytes'))]"
+            "value": 4398046511104
           }
         },
         "template": {

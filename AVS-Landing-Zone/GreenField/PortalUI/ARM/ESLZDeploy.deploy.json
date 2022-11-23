@@ -53,6 +53,13 @@
         "description": "Service level of Azure NetApp Files datastore; standard, premium, or ultra"
       }
     },
+    "ANFVolumeName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The name of the Azure NetApp Files datastore"
+      }
+    },
     "ANFvNetAddressSpace": {
       "type": "string",
       "defaultValue": "",
@@ -126,6 +133,12 @@
             "value": "[parameters('ANFServiceLevel')]"
           },
           "ANFCapacityPoolSize": {
+            "value": "parameters('ANFdatastoreSize')]"
+          },
+          "ANFVolumeName": {
+            "value": "[parameters('ANFVolumeName')]"
+          },
+          "ANFVolumeSize": {
             "value": "[mul(parameters('ANFdatastoreSize'), 1073741824)]"
           }
         },
@@ -165,6 +178,12 @@
               "type": "string"
             },
             "ANFCapacityPoolSize": {
+              "type": "int"
+            },
+            "ANFVolumeName": {
+              "type": "string"
+            },
+            "ANFVolumeSize": {
               "type": "int"
             }
           },
@@ -284,6 +303,44 @@
               ],
               "metadata": {
                 "description": "create Azure NetApp Files capacity pool"
+              }
+            },
+            {
+              "type": "Microsoft.NetApp/netAppAccounts/capacityPools/volumes",
+              "apiVersion": "2022-01-01",
+              "name": "[format('{0}/{1}/{2}', parameters('ANFAccountName'), parameters('ANFCapacityPoolName'), parameters('ANFVolumeName'))]",
+              "location": "[parameters('Location')]",
+              "properties": {
+                "avsDataStore": "Enabled",
+                "creationToken": "[parameters('ANFVolumeName')]",
+                "exportPolicy": {
+                  "rules": [
+                    {
+                      "allowedClients": "0.0.0.0/0",
+                      "chownMode": "restricted",
+                      "cifs": false,
+                      "hasRootAccess": true,
+                      "nfsv3": true,
+                      "nfsv41": false,
+                      "ruleIndex": 1,
+                      "unixReadWrite": true
+                    }
+                  ]
+                },
+                "networkFeatures": "Standard",
+                "protocolTypes": [
+                  "NFSv3"
+                ],
+                "serviceLevel": "[parameters('ANFServiceLevel')]",
+                "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ANFVNetName'), 'ANFDelegatedSubnet')]",
+                "usageThreshold": "[parameters('ANFVolumeSize')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.NetApp/netAppAccounts/capacityPools', parameters('ANFAccountName'), parameters('ANFCapacityPoolName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ANFVNetName'), 'ANFDelegatedSubnet')]"
+              ],
+              "metadata": {
+                "description": "create Azure NetApp Files volume"
               }
             }
           ],

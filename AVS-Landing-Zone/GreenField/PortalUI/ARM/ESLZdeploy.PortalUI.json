@@ -161,6 +161,15 @@
                             }
                         },
                         {
+                            "name": "ANFvolumeName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "ANF datastore name",
+                            "visible": "[equals(steps('anfdatastore').DeployANFdatastore, true)]",
+                            "toolTip": "Provide a name for the ANF datastore.",
+                            "placeholder": "Example: ANFdatastore001",
+                            "defaultValue": "ANFdatastore001"
+                        },
+                        {
                             "name": "ANFvnet",
                             "type": "Microsoft.Common.Section",
                             "visible": "[equals(steps('anfdatastore').DeployANFdatastore, true)]",
@@ -243,6 +252,7 @@
                 "DeployANFdatastore": "[steps('anfdatastore').DeployANFdatastore]",
                 "ANFdatastoreSize": "[steps('anfdatastore').ANFdatastoreSize]",
                 "ANFServiceLevel": "[steps('anfdatastore').ANFserviceLevel]",
+                "ANFVolumeName": "[steps('anfdatastore').ANFvolumeName]",
                 "ANFvNetAddressSpace": "[steps('anfdatastore').ANFvNetAddressSpace]",
                 "ANFGatewaySubnetPrefix": "[steps('anfdatastore').ANFGatewaySubnetPrefix]",
                 "ANFDelegatedSubnetPrefix": "[steps('anfdatastore').ANFDelegatedSubnetPrefix]"

@@ -165,7 +165,7 @@
               "type": "string"
             },
             "ANFCapacityPoolSize": {
-              "type": "string"
+              "type": "int"
             }
           },
           "resources": [

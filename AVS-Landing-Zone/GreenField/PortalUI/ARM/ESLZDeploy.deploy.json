@@ -71,7 +71,7 @@
     }
   },
   "variables": {
-    "deploymentPrefix": "[format('AVS-{0}', uniqueString(deployment().name, parameters('Location')))]",
+    "deploymentPrefix": "[format('ANFdatastore-{0}', uniqueString(deployment().name, parameters('Location')))]",
     "varCuaid": "1cf4a3e3-529c-4fb2-ba6a-63dff7d71586",
     "ANFVNetName": "[format('{0}-ANFvnet', parameters('Prefix'))]",
     "ANFVNetGatewayName": "[format('{0}-ANFgw', parameters('Prefix'))]"
@@ -161,6 +161,7 @@
         }
       },
       "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', format('{0}-ANFdatastore', parameters('Prefix')))]"
       ]
     }
   ]

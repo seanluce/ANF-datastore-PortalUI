@@ -43,7 +43,12 @@
     },
     "ANFServiceLevel" : {
       "type": "string",
-      "defaultValue": "Premium",
+      "defaultValue": "Ultra",
+      "allowedValues": [
+        "Standard",
+        "Premium",
+        "Ultra"
+      ],
       "metadata": {
         "description": "Service level of Azure NetApp Files datastore; standard, premium, or ultra"
       }
@@ -72,10 +77,6 @@
   },
   "variables": {
     "deploymentPrefix": "[format('ANFdatastore-{0}', uniqueString(deployment().name, parameters('Location')))]",
-    "varCuaid": "1cf4a3e3-529c-4fb2-ba6a-63dff7d71586",
-    "ANFVNetName": "[format('{0}-ANFvnet', parameters('Prefix'))]",
-    "ANFVNetGatewayName": "[format('{0}-ANFgw', parameters('Prefix'))]",
-    "ANFAccountName": "[format('{0}-ANFAccount', parameters('Prefix'))]"
   },
   "resources": [
     {
@@ -85,7 +86,7 @@
       "name": "[format('{0}-ANFdatastore', parameters('Prefix'))]",
       "location": "[parameters('Location')]",
       "tags": {
-        "owner": "sluce"
+        "owner": "changeme"
       }
     },
     {
@@ -114,6 +115,18 @@
           },
           "ANFDelegatedSubnetPrefix": {
             "value": "[parameters('ANFDelegatedSubnetPrefix')]"
+          },
+          "ANFAccountName": {
+            "value": "[format('{0}-ANFAccount', parameters('Prefix'))]"
+          },
+          "ANFCapacityPoolName": {
+            "value": "[format('{0}-ANFCapacityPool', parameters('Prefix'))]"
+          },
+          "ANFServiceLevel": {
+            "value": "[parameters('ANFServiceLevel')]"
+          },
+          "ANFCapacityPoolSize": {
+            "value": "[mul(parameters('ANFdatastoreSize'), 1073741824)]"
           }
         },
         "template": {
@@ -141,6 +154,18 @@
             },
             "ANFDelegatedSubnetPrefix": {
               "type": "string"
+            },
+            "ANFAccountName": {
+              "type": "string"
+            },
+            "ANFCapacityPoolName": {
+              "type": "string"
+            },
+            "ANFServiceLevel": {
+              "type": "string"
+            },
+            "ANFCapacityPoolSize": {
+              "type": "string"
             }
           },
           "resources": [
@@ -150,7 +175,7 @@
               "name": "[format('{0}-ANFVNet', parameters('Prefix'))]",
               "location": "[parameters('Location')]",
               "tags": {
-                "owner": "sluce"
+                "owner": "changeme"
               },
               "properties": {
                 "addressSpace": {
@@ -237,10 +262,28 @@
             {
               "type": "Microsoft.NetApp/netAppAccounts",
               "apiVersion": "2022-01-01",
-              "name": "[format('{0}-ANFAccount', parameters('Prefix'))]",
+              "name": "[parameters('ANFAccountName')]",
               "location": "[parameters('Location')]",
               "metadata": {
                 "description": "create Azure NetApp Files account"
+              }
+            },
+            {
+              "type": "Microsoft.NetApp/netAppAccounts/capacityPools",
+              "apiVersion": "2022-01-01",
+              "name": "[format('{0}/{1}', parameters('ANFAccountName'), parameters('ANFCapacityPoolName'))]",
+              "location": "[parameters('Location')]",
+              "properties": {
+                "coolAccess": false,
+                "qosType": "Auto",
+                "serviceLevel": "[parameters('ANFCapacityPoolServiceLevel')]",
+                "size": "[parameters('ANFCapacityPoolSize')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.NetApp/netAppAccounts', parameters('ANFAccountName'))]"
+              ],
+              "metadata": {
+                "description": "create Azure NetApp Files capacity pool"
               }
             }
           ],

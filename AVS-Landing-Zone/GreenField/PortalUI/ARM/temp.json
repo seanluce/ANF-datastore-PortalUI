@@ -24,24 +24,7 @@
     ]
   },
   ,
-  {
-    "type": "Microsoft.NetApp/netAppAccounts/capacityPools",
-    "apiVersion": "2022-01-01",
-    "name": "[format('{0}/{1}', parameters('netappAccountName'), parameters('netappCapacityPoolName'))]",
-    "location": "[parameters('Location')]",
-    "properties": {
-      "coolAccess": false,
-      "qosType": "Auto",
-      "serviceLevel": "[parameters('netappCapacityPoolServiceLevel')]",
-      "size": "[parameters('netappCapacityPoolSize')]"
-    },
-    "dependsOn": [
-      "[resourceId('Microsoft.NetApp/netAppAccounts', parameters('netappAccountName'))]"
-    ],
-    "metadata": {
-      "description": "create Azure NetApp Files capacity pool"
-    }
-  },
+  ,
   {
     "type": "Microsoft.NetApp/netAppAccounts/capacityPools/volumes",
     "apiVersion": "2022-01-01",

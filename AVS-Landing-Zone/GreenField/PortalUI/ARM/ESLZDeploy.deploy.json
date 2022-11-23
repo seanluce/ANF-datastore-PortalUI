@@ -90,7 +90,6 @@
       "apiVersion": "2020-10-01",
       "name": "[format('{0}-ANFdatastore', variables('deploymentPrefix'))]",
       "resourceGroup": "[format('{0}-ANFdatastore', parameters('Prefix'))]",
-      "location": "[deployment().location]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "Inner"

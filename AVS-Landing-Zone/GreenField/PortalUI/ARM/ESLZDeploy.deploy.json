@@ -295,7 +295,7 @@
               "properties": {
                 "coolAccess": false,
                 "qosType": "Auto",
-                "serviceLevel": "[parameters('ANFCapacityPoolServiceLevel')]",
+                "serviceLevel": "[parameters('ANFServiceLevel')]",
                 "size": "[parameters('ANFCapacityPoolSize')]"
               },
               "dependsOn": [

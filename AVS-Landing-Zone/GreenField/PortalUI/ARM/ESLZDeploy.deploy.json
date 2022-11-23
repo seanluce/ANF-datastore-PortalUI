@@ -142,7 +142,7 @@
             "value": "[parameters('ANFVolumeName')]"
           },
           "ANFVolumeSize": {
-            "value": "[mul(parameters('ANFdatastoreSize'), 4398046511104)]"
+            "value": "[mul(parameters('ANFdatastoreSize'), parameters('TiBtoBytes'))]"
           }
         },
         "template": {

@@ -136,13 +136,13 @@
             "value": 1099511627776
           },
           "ANFCapacityPoolSize": {
-            "value": 4398046511104
+            "value": "[parameters('ANFdatastoreSize')]"
           },
           "ANFVolumeName": {
             "value": "[parameters('ANFVolumeName')]"
           },
           "ANFVolumeSize": {
-            "value": 4398046511104
+            "value": "[parameters('ANFdatastoreSize')]"
           }
         },
         "template": {
@@ -302,7 +302,7 @@
                 "coolAccess": false,
                 "qosType": "Auto",
                 "serviceLevel": "[parameters('ANFServiceLevel')]",
-                "size": "[parameters('ANFCapacityPoolSize')]"
+                "size": "[mul(parameters('ANFCapacityPoolSize'), parameters('TiBtoBytes'))]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.NetApp/netAppAccounts', parameters('ANFAccountName'))]"
@@ -339,7 +339,7 @@
                 ],
                 "serviceLevel": "[parameters('ANFServiceLevel')]",
                 "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', format('{0}-ANFVNet', parameters('Prefix')), 'ANFDelegatedSubnet')]",
-                "usageThreshold": "[parameters('ANFVolumeSize')]"
+                "usageThreshold": "[mul(parameters('ANFVolumeSize'), parameters('TiBtoBytes'))]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.NetApp/netAppAccounts/capacityPools', parameters('ANFAccountName'), parameters('ANFCapacityPoolName'))]",

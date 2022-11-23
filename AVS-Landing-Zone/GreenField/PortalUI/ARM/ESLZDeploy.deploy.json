@@ -76,7 +76,7 @@
     }
   },
   "variables": {
-    "deploymentPrefix": "[format('ANFdatastore-{0}', uniqueString(deployment().name, parameters('Location')))]",
+    "deploymentPrefix": "[format('ANFdatastore-{0}', uniqueString(deployment().name, parameters('Location')))]"
   },
   "resources": [
     {

@@ -332,12 +332,12 @@
                   "NFSv3"
                 ],
                 "serviceLevel": "[parameters('ANFServiceLevel')]",
-                "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ANFVNetName'), 'ANFDelegatedSubnet')]",
+                "subnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', format('{0}-ANFVNet', parameters('Prefix')), 'ANFDelegatedSubnet')]",
                 "usageThreshold": "[parameters('ANFVolumeSize')]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.NetApp/netAppAccounts/capacityPools', parameters('ANFAccountName'), parameters('ANFCapacityPoolName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('ANFVNetName'), 'ANFDelegatedSubnet')]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', format('{0}-ANFVNet', parameters('Prefix')), 'ANFDelegatedSubnet')]"
               ],
               "metadata": {
                 "description": "create Azure NetApp Files volume"

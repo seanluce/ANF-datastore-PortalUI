@@ -132,14 +132,17 @@
           "ANFServiceLevel": {
             "value": "[parameters('ANFServiceLevel')]"
           },
+          "TiBtoBytes": {
+            "value": 1099511627776
+          },
           "ANFCapacityPoolSize": {
-            "value": "[mul(parameters('ANFdatastoreSize'), 1099511627776)]"
+            "value": "[mul(parameters('ANFdatastoreSize'), parameters('TiBtoBytes'))]"
           },
           "ANFVolumeName": {
             "value": "[parameters('ANFVolumeName')]"
           },
           "ANFVolumeSize": {
-            "value": "[mul(parameters('ANFdatastoreSize'), 1099511627776)]"
+            "value": "[mul(parameters('ANFdatastoreSize'), 4398046511104)]"
           }
         },
         "template": {
@@ -176,6 +179,9 @@
             },
             "ANFServiceLevel": {
               "type": "string"
+            },
+            "TiBtoBytes": {
+              "type": "int"
             },
             "ANFCapacityPoolSize": {
               "type": "int"

@@ -23,15 +23,7 @@
       "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('GatewayName'))]"
     ]
   },
-  {
-    "type": "Microsoft.NetApp/netAppAccounts",
-    "apiVersion": "2022-01-01",
-    "name": "[parameters('netappAccountName')]",
-    "location": "[parameters('Location')]",
-    "metadata": {
-      "description": "create Azure NetApp Files account"
-    }
-  },
+  ,
   {
     "type": "Microsoft.NetApp/netAppAccounts/capacityPools",
     "apiVersion": "2022-01-01",

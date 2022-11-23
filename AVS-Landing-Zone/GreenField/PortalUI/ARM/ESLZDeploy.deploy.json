@@ -74,7 +74,8 @@
     "deploymentPrefix": "[format('ANFdatastore-{0}', uniqueString(deployment().name, parameters('Location')))]",
     "varCuaid": "1cf4a3e3-529c-4fb2-ba6a-63dff7d71586",
     "ANFVNetName": "[format('{0}-ANFvnet', parameters('Prefix'))]",
-    "ANFVNetGatewayName": "[format('{0}-ANFgw', parameters('Prefix'))]"
+    "ANFVNetGatewayName": "[format('{0}-ANFgw', parameters('Prefix'))]",
+    "ANFAccountName": "[format('{0}-ANFAccount', parameters('Prefix'))]"
   },
   "resources": [
     {
@@ -232,6 +233,15 @@
                 "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-PIP', variables('ANFVNetGatewayName')))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('ANFVNetName'))]"
               ]
+            },
+            {
+              "type": "Microsoft.NetApp/netAppAccounts",
+              "apiVersion": "2022-01-01",
+              "name": "[variables('ANFAccountName')]",
+              "location": "[parameters('Location')]",
+              "metadata": {
+                "description": "create Azure NetApp Files account"
+              }
             }
           ],
           "outputs": {

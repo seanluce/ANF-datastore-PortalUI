@@ -193,7 +193,7 @@
             {
               "type": "Microsoft.Network/publicIPAddresses",
               "apiVersion": "2021-02-01",
-              "name": "[format('{0}-PIP', variables('ANFVNetGatewayName'))]",
+              "name": "[format('{0}-PIP', format('{0}-ANFgw', parameters('Prefix')))]",
               "location": "[parameters('Location')]",
               "properties": {
                 "publicIPAllocationMethod": "Dynamic"
@@ -206,7 +206,7 @@
             {
               "type": "Microsoft.Network/virtualNetworkGateways",
               "apiVersion": "2021-02-01",
-              "name": "[variables('ANFVNetGatewayName')]",
+              "name": "[format('{0}-ANFgw', parameters('Prefix'))]",
               "location": "[parameters('Location')]",
               "properties": {
                 "gatewayType": "ExpressRoute",
@@ -220,24 +220,24 @@
                     "properties": {
                       "privateIPAllocationMethod": "Dynamic",
                       "subnet": {
-                        "id": "[format('{0}/subnets/GatewaySubnet', resourceId('Microsoft.Network/virtualNetworks', variables('ANFVNetName')))]"
+                        "id": "[format('{0}/subnets/GatewaySubnet', resourceId('Microsoft.Network/virtualNetworks', format('{0}-ANFvnet', parameters('Prefix'))))]"
                       },
                       "publicIPAddress": {
-                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-PIP', variables('ANFVNetGatewayName')))]"
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-PIP', format('{0}-ANFgw', parameters('Prefix'))))]"
                       }
                     }
                   }
                 ]
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-PIP', variables('ANFVNetGatewayName')))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('ANFVNetName'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-PIP', format('{0}-ANFgw', parameters('Prefix'))))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', format('{0}-ANFvnet', parameters('Prefix')))]"
               ]
             },
             {
               "type": "Microsoft.NetApp/netAppAccounts",
               "apiVersion": "2022-01-01",
-              "name": "[variables('ANFAccountName')]",
+              "name": "[format('{0}-ANFAccount', parameters('Prefix'))]",
               "location": "[parameters('Location')]",
               "metadata": {
                 "description": "create Azure NetApp Files account"

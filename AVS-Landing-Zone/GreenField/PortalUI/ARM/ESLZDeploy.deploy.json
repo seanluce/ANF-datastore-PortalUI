@@ -82,7 +82,10 @@
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2021-04-01",
       "name": "[format('{0}-ANFdatastore', parameters('Prefix'))]",
-      "location": "[parameters('Location')]"
+      "location": "[parameters('Location')]",
+      "tags": {
+        "owner": "sluce"
+      }
     },
     {
       "condition": "[parameters('DeployANFdatastore')]",
@@ -139,6 +142,9 @@
               "apiVersion": "2021-02-01",
               "name": "[format('{0}-ANFVNet', parameters('Prefix'))]",
               "location": "[parameters('Location')]",
+              "tags": {
+                "owner": "sluce"
+              },
               "properties": {
                 "addressSpace": {
                   "addressPrefixes": [

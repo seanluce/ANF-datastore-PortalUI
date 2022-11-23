@@ -192,7 +192,7 @@
             {
               "type": "Microsoft.Network/publicIPAddresses",
               "apiVersion": "2021-02-01",
-              "name": "[format('{0}-PIP', parameters('ANFVNetGatewayName'))]",
+              "name": "[format('{0}-PIP', variables('ANFVNetGatewayName'))]",
               "location": "[parameters('Location')]",
               "properties": {
                 "publicIPAllocationMethod": "Dynamic"
@@ -205,7 +205,7 @@
             {
               "type": "Microsoft.Network/virtualNetworkGateways",
               "apiVersion": "2021-02-01",
-              "name": "[parameters('ANFVNetGatewayName')]",
+              "name": "[variables('ANFVNetGatewayName')]",
               "location": "[parameters('Location')]",
               "properties": {
                 "gatewayType": "ExpressRoute",
@@ -219,18 +219,18 @@
                     "properties": {
                       "privateIPAllocationMethod": "Dynamic",
                       "subnet": {
-                        "id": "[format('{0}/subnets/GatewaySubnet', resourceId('Microsoft.Network/virtualNetworks', parameters('ANFVNetName')))]"
+                        "id": "[format('{0}/subnets/GatewaySubnet', resourceId('Microsoft.Network/virtualNetworks', variables('ANFVNetName')))]"
                       },
                       "publicIPAddress": {
-                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-PIP', parameters('ANFVNetGatewayName')))]"
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-PIP', variables('ANFVNetGatewayName')))]"
                       }
                     }
                   }
                 ]
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-PIP', parameters('ANFVNetGatewayName')))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('ANFVNetName'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-PIP', variables('ANFVNetGatewayName')))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('ANFVNetName'))]"
               ]
             }
           ],

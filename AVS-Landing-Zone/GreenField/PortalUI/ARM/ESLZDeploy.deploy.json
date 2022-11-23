@@ -110,6 +110,9 @@
           },
           "ANFGatewaySubnetPrefix": {
             "value": "[parameters('ANFGatewaySubnetPrefix')]"
+          },
+          "ANFDelegatedSubnetPrefix": {
+            "value": "[parameters('ANFDelegatedSubnetPrefix')]"
           }
         },
         "template": {
@@ -133,6 +136,9 @@
               "type": "string"
             },
             "ANFGatewaySubnetPrefix": {
+              "type": "string"
+            },
+            "ANFDelegatedSubnetPrefix": {
               "type": "string"
             }
           },

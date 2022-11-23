@@ -1,25 +1,4 @@
-{
-    "type": "Microsoft.Network/virtualNetworks/subnets",
-    "apiVersion": "2022-01-01",
-    "name": "[format('{0}/{1}', parameters('ANFVNetName'), 'ANFDelegatedSubnet')]",
-    "properties": {
-      "delegations": [
-        {
-          "name": "microsoftnetapp",
-          "properties": {
-            "serviceName": "Microsoft.Netapp/volumes"
-          }
-        }
-      ],
-      "addressPrefix": "[parameters('ANFDelegatedSubnetPrefix')]"
-    },
-    "dependsOn": [
-      "[resourceId('Microsoft.Network/virtualNetworks', parameters('VNetName'))]"
-    ],
-    "metadata": {
-      "description": "create Azure NetApp files delegated subnet"
-    }
-  },
+,
   {
     "type": "Microsoft.Network/publicIPAddresses",
     "apiVersion": "2021-02-01",
